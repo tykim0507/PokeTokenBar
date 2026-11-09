@@ -55,10 +55,12 @@ test("desktop shell, real log growth, persistence, settings and renderer isolati
       graduates: 0,
     }),
   );
+  const launchEnv = { ...process.env };
+  delete launchEnv.ELECTRON_RUN_AS_NODE;
   const launch = () =>
     electron.launch({
       args: [resolve("."), `--test-profile=${profile}`],
-      env: { ...process.env, ELECTRON_RUN_AS_NODE: "" },
+      env: launchEnv,
     });
   let application = await launch();
   try {

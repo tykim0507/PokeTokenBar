@@ -468,3 +468,34 @@ test("sprite failures retry and simultaneous requests share a single download", 
   await client.sprite(1, false);
   assert.equal(calls, 2);
 });
+
+test("installer and portable output patterns expand with the actual packager macros", async () => {
+  const { expandMacro } = require("app-builder-lib/out/util/macroExpander");
+  const config = JSON.parse(await readFile("package.json", "utf8"));
+  const names = ["nsis", "portable"].map((target) =>
+    expandMacro(
+      config.build[target].artifactName,
+      "x64",
+      { version: config.version },
+      { ext: "exe" },
+    ),
+  );
+  assert.deepEqual(names, [
+    "PokeTokenBar-Windows-0.1.0-x64-nsis.exe",
+    "PokeTokenBar-Windows-0.1.0-x64-portable.exe",
+  ]);
+});
+
+test("generated installer icon includes small tray sizes and the required 256px image", async () => {
+  const ico = await readFile("resources/icon.ico");
+  assert.equal(ico.readUInt16LE(2), 1);
+  assert.equal(ico.readUInt16LE(4), 4);
+  assert.deepEqual(
+    [0, 1, 2, 3].map((i) => ico[6 + i * 16] || 256),
+    [16, 32, 48, 256],
+  );
+  for (let i = 0; i < 4; i++) {
+    const offset = ico.readUInt32LE(6 + i * 16 + 12);
+    assert.equal(ico.subarray(offset + 1, offset + 4).toString(), "PNG");
+  }
+});

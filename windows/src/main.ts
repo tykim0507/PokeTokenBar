@@ -279,7 +279,9 @@ async function start(): Promise<void> {
     }),
   );
   tray = new Tray(
-    nativeImage.createFromPath(join(app.getAppPath(), "resources/icon.png")),
+    nativeImage
+      .createFromPath(join(app.getAppPath(), "resources/icon.png"))
+      .resize({ width: 32, height: 32 }),
   );
   tray.setToolTip("PokeTokenBar");
   tray.setContextMenu(

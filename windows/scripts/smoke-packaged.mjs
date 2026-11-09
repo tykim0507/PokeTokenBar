@@ -1,6 +1,9 @@
 import { _electron as electron, expect } from "@playwright/test";
 import { resolve } from "node:path";
+const launchEnv = { ...process.env };
+delete launchEnv.ELECTRON_RUN_AS_NODE;
 const app = await electron.launch({
+  env: launchEnv,
   executablePath: resolve("release/win-unpacked/PokeTokenBar Windows.exe"),
 });
 try {

@@ -44,16 +44,19 @@
         "nsis",
         "portable"
       ],
-      "icon": "resources/icon.ico",
-      "artifactName": "PokeTokenBar-Windows-${version}-${arch}-${target}.${ext}"
+      "icon": "resources/icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
-      "deleteAppDataOnUninstall": false
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "PokeTokenBar-Windows-${version}-${arch}-nsis.${ext}"
     },
-    "publish": null
+    "publish": null,
+    "portable": {
+      "artifactName": "PokeTokenBar-Windows-${version}-${arch}-portable.${ext}"
+    }
   },
   "overrides": {
     "minimatch@>=7 <11.0.1": "11.0.5"
