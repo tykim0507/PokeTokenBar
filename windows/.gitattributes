@@ -1,0 +1,4 @@
+# Keep formatter input identical on Windows and macOS, regardless of core.autocrlf.
+* text=auto eol=lf
+*.png binary
+*.ico binary
