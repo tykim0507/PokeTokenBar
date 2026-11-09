@@ -1,0 +1,55 @@
+name: Windows desktop
+
+on:
+  push:
+    paths: ['windows/**', '.github/workflows/windows.yml']
+  pull_request:
+    paths: ['windows/**', '.github/workflows/windows.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: windows
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run test:e2e
+      - name: Build installer and portable executable
+        run: npm run package:win
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Smoke test the packaged executable
+        run: node scripts/smoke-packaged.mjs
+      - name: Upload Windows binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: PokeTokenBar-Windows-x64
+          path: windows/release/*.exe
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload desktop test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-desktop-test-evidence
+          path: windows/test-results/
+          if-no-files-found: ignore
+          retention-days: 14

@@ -4,6 +4,8 @@
 
 # PokeTokenBar
 
+> **Windows fork:** A Windows tray and desktop companion is available in [`windows/`](windows/README.md). Download installer and portable builds from the [Windows desktop workflow](https://github.com/tykim0507/PokeTokenBar/actions/workflows/windows.yml). The original macOS app below is unchanged.
+
 **Your AI coding tokens, hatched into Pokémon — right in your menu bar.**
 
 [![Release](https://img.shields.io/github/v/release/chattymin/PokeTokenBar?color=444d56&label=release)](https://github.com/chattymin/PokeTokenBar/releases)
