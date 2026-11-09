@@ -218,7 +218,12 @@ async function start(): Promise<void> {
     enqueue(async () => {
       const settings = settingsSchema.parse(value);
       if (process.platform === "win32" && !testProfile)
-        app.setLoginItemSettings({ openAtLogin: settings.launchAtLogin });
+        app.setLoginItemSettings({
+          openAtLogin: settings.launchAtLogin,
+          // The portable wrapper extracts process.execPath to a temporary directory.
+          path: process.env.PORTABLE_EXECUTABLE_FILE || process.execPath,
+          args: [],
+        });
       await controller.setSettings(settings);
       syncPet();
       await controller.refresh();
